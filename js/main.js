@@ -140,4 +140,3 @@ for (saleListing of seattleDailySales) {
   // append listing to seattleList
   seattleList.appendChild(listing);
 }
-
