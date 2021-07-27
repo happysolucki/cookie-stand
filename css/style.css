@@ -94,3 +94,12 @@ a {
 .dropDownTitle {
   margin: 12px 15px;
 }
+
+.dropDownOption {
+  display: block;
+  text-align: left;
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
+  padding: 0 10px 4px 15px;
+  cursor: pointer;
+}
