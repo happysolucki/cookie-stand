@@ -12,7 +12,12 @@
   src: url(../assets/fonts/poppins-v15-latin-700.woff2) format('woff2');
 }
 
+html {
+  text-rendering: optimizeLegibility;
+}
+
 body {
+  margin: 0;
   font-family: 'Baloo 2';
   background-color: #dec2a4;
   color: #ffebd6;
@@ -21,4 +26,52 @@ body {
 h3 {
   font-family: 'Poppins';
   color: #91785d;
+}
+
+.top-half {
+  height: auto;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 80px 0 60px;
+}
+
+.navLinks > a {
+  padding-left: 1rem;
+}
+
+.storeBox {
+  height: 175px;
+  text-align: center;
+  margin-top: 25px;
+}
+
+.storeContainer {
+  white-space: nowrap;
+  letter-spacing: 1.5px;
+}
+
+.closed {
+  height: 40px !important;
+}
+
+.dropDownSelect {
+  width: 146px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #91785d;
+  cursor: pointer;
+}
+
+.dropDownSelect:hover {
+  height: calc(30px * 3 + 28px);
+}
+
+.dropDownTitle {
+  margin: 12px 15px;
 }
