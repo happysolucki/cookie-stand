@@ -23,9 +23,14 @@ body {
   color: #ffebd6;
 }
 
-h3 {
+span {
   font-family: 'Poppins';
   color: #91785d;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
 }
 
 .top-half {
@@ -43,7 +48,9 @@ h3 {
 }
 
 .navLinks > a {
-  padding-left: 1rem;
+  padding-left: 1.5rem;
+  font-family: 'Poppins';
+  color: #91785d;
 }
 
 .storeBox {
@@ -64,12 +71,20 @@ h3 {
 .dropDownSelect {
   width: 146px;
   text-transform: uppercase;
+  border: 0 solid transparent;
   border-bottom: 2px solid #91785d;
   cursor: pointer;
+  user-select: none;
+  transition: all 0.25s ease;
+  overflow: hidden;
 }
 
 .dropDownSelect:hover {
   height: calc(30px * 3 + 28px);
+  transform: translate(0, -3px);
+  box-shadow: 4px 4px 0 0 #91785d;
+  border: 2px solid #91785d;
+  border-radius: 3px;
 }
 
 .dropDownTitle {
