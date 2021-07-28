@@ -51,10 +51,24 @@ a {
   padding: 80px 0 60px;
 }
 
+.navLinks {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .navLinks > a {
-  padding-left: 1.5rem;
+  padding-left: 50px;
   font-family: 'Poppins';
   color: #91785d;
+}
+
+.navLinks > a:hover {
+  color: #453625;
+}
+
+.storeSpread {
+  display: flex;
+  justify-content: space-between;
 }
 
 .storeBox {
