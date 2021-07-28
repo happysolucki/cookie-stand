@@ -5,45 +5,94 @@ function Shop(city, minHrPatrons, maxHrPatrons, cookiesPerPatron) {
   this.minHrPatrons = minHrPatrons;
   this.maxHrPatrons = maxHrPatrons;
   this.cookiesPerPatron = cookiesPerPatron;
+  this.cookieTotal = 0;
   this.customersPerHour = function() {
+    // round down a random number within the range of minHourlyPatrons and maxHourlyPatrons
     return Math.floor(Math.random() * (this.maxHrPatrons - this.minHrPatrons + 1) + this.minHrPatrons);
   }
   this.cookiesPerHour = function() {
+    // take result of customersPerHour() and multiply it by average cookies per customer
     return Math.floor(this.customersPerHour() * this.cookiesPerPatron);
   }
   this.cookiesPerDay = function() {
     let totalCookies = 0;
     const hourlySales = [];
     for (hr of businessHours) {
+      // save cookiesPerHour into variable
       let randCookies = this.cookiesPerHour();
+      // add value stored in randCookies to end of hourlySales array
       hourlySales.push(randCookies);
+      // sum up all instances of randCookies into totalCookies
       totalCookies += randCookies;
     }
-    hourlySales.push(totalCookies);
+    // set ojbect's cookie total to totalCookies
+    this.cookieTotal = totalCookies;
     return hourlySales;
   },
   this.renderList = function() {
+    // store array that's returned from cookiesPerDay into sales
     const sales = this.cookiesPerDay();
-    console.log(sales);
-    const unorderedlist = document.querySelector(`.${this.city}-sales`);
+    // capture DOM element for heading that corresponds to this object's city property
+    const cityHeading = document.querySelector(`.${this.city}-heading`);
+    // set what'll display on the screen for cityHeading to capitalized city property
+    cityHeading.textContent = this.city[0].toUpperCase() + this.city.substring(1).toLowerCase();
+    // capture DOM element for list that corresponds to this object's city property
+    const unorderedList = document.querySelector(`.${this.city}-sales`);
     for (let i = 0; i < businessHours.length; i++) {
+      // create new li element
       const listItem = document.createElement('li');
+      // set what'll display on the screen to string that incorporates current business hour and it's corresponding sales
       listItem.textContent = `${businessHours[i]}: ${sales[i]} cookies`;
-      unorderedlist.appendChild(listItem);
+      // append listItem element to end of unorderedList
+      unorderedList.appendChild(listItem);
+    }
+    // create element for total cookies sold in a day, set it's text content, then append to unorderedList
+    const total = document.createElement('li');
+    total.textContent = `Total: ${this.cookieTotal} cookies`;
+    unorderedList.appendChild(total);
+  },
+  this.renderTable = function() {
+    // store array that's returned from cookiesPerDay into sales
+    const sales = this.cookiesPerDay();
+    // add this object's daily cookie total to end of sales array
+    sales.push(this.cookieTotal);
+    console.log(sales);
+    // capture DOM element for list that corresponds to this object's city property
+    const cityRow = document.querySelector(`.${this.city}-row`);
+    // create th element
+    const rowHeader = document.createElement('th');
+    // ensure text content shows capitized city property
+    rowHeader.textContent = this.city[0].toUpperCase() + this.city.substring(1).toLowerCase();
+    // append rowHeader to end of cityRow
+    cityRow.appendChild(rowHeader);
+    // for length of sales
+    for (sale of sales) {
+      // creat td element
+      const entry = document.createElement('td');
+      // assign this entry's text content to current index in sales array
+      entry.textContent = sale;
+      // append entry to cityRow
+      cityRow.appendChild(entry);
     }
   }
+}
 
-  // this.cookiesPerDay = function() {
-  //   let totalCookies = 0;
-  //   const hourlySales = [];
-  //   for (hr of businessHours) {
-  //     let randCookies = this.cookiesPerHour();
-  //     hourlySales.push(`${hr}: ${randCookies} cookies`);
-  //     totalCookies += randCookies;
-  //   }
-  //   hourlySales.push(`Total: ${totalCookies} cookies`);
-  //   return hourlySales;
-  // }
+const tableRowHeader = (arr, selector) => {
+  // capture DOM element that matches the selector parameter
+  const tableHeader = document.querySelector(selector);
+  // for item in parameter arr
+  for (item of arr) {
+    // create td element
+    const entry = document.createElement('td');
+    // assign this entry's text content to current index in arr parameter
+    entry.textContent = item;
+    // append entry to timeRow
+    tableHeader.appendChild(entry);
+  }
+  // create element that serves as title for daily cookies sold. append to tableHeader
+  const entry = document.createElement('td');
+  entry.textContent = 'Daily Total';
+  tableHeader.appendChild(entry);
 }
 
 let seattle = new Shop('seattle', 23, 65, 6.3);
@@ -53,148 +102,13 @@ let paris = new Shop('paris', 20, 38, 2.3);
 let lima = new Shop('lima', 2, 16, 4.6);
 
 seattle.renderList();
+tokyo.renderList();
+dubai.renderList();
 
-// console.log(lima.cookiesPerDay());
+tableRowHeader(businessHours, '.time-row');
+seattle.renderTable();
+tokyo.renderTable();
+dubai.renderTable();
+paris.renderTable();
+lima.renderTable();
 
-const seattleShop = {
-  minHourlyPatrons: 23,
-  maxHourlyPatrons: 65,
-  cookiesPerPatron: 6.3,
-  customersPerHour() {
-    // round down a random number within the range of minHourlyPatrons and maxHourlyPatrons
-    return Math.floor(Math.random() * (this.maxHourlyPatrons - this.minHourlyPatrons) + this.minHourlyPatrons);
-  },
-  cookiesPerHour() {
-    // take result of customersPerHour() and multiply it by average cookies per customer
-    return Math.floor(this.customersPerHour() * this.cookiesPerPatron);
-  },
-  cookiesPerDay() {
-    let totalCookies = 0;
-    const hourlySales = [];
-    // create array of open hours
-    const openHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
-    for (hr of openHours) {
-      // save cookiesPerHour into variable
-      let randCookies = this.cookiesPerHour();
-      // create string that incorporates entry from openHours and randCookies. push onto hourlySales
-      hourlySales.push(`${hr}: ${randCookies} cookies`);
-      // sum up all instances of randCookies into totalCookies
-      totalCookies += randCookies;
-    }
-    // push string incorporating totalCookies onto hourlySales
-    hourlySales.push(`Total: ${totalCookies} cookies`);
-    return hourlySales;
-  },
-}
-
-
-// const tokyoShop = {
-//   minHourlyPatrons: 3,
-//   maxHourlyPatrons: 24,
-//   cookiesPerPatron: 1.2,
-//   customersPerHour() {
-//     return Math.floor(Math.random() * (this.maxHourlyPatrons - this.minHourlyPatrons) + this.minHourlyPatrons);
-//   },
-//   cookiesPerHour() {
-//     return Math.floor(this.customersPerHour() * this.cookiesPerPatron);
-//   },
-//   cookiesPerDay() {
-//     let totalCookies = 0;
-//     const hourlySales = [];
-//     const openHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
-//     for (hr of openHours) {
-//       let randCookies = this.cookiesPerHour();
-//       hourlySales.push(`${hr}: ${randCookies} cookies`);
-//       totalCookies += randCookies;
-//     }
-//     hourlySales.push(`Total: ${totalCookies} cookies`);
-//     return hourlySales;
-//   },
-// }
-// 
-// 
-// const dubaiShop = {
-//   minHourlyPatrons: 11,
-//   maxHourlyPatrons: 38,
-//   cookiesPerPatron: 3.7,
-//   customersPerHour() {
-//     return Math.floor(Math.random() * (this.maxHourlyPatrons - this.minHourlyPatrons) + this.minHourlyPatrons);
-//   },
-//   cookiesPerHour() {
-//     return Math.floor(this.customersPerHour() * this.cookiesPerPatron);
-//   },
-//   cookiesPerDay() {
-//     let totalCookies = 0;
-//     const hourlySales = [];
-//     const openHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
-//     for (hr of openHours) {
-//       let randCookies = this.cookiesPerHour();
-//       hourlySales.push(`${hr}: ${randCookies} cookies`);
-//       totalCookies += randCookies;
-//     }
-//     hourlySales.push(`Total: ${totalCookies} cookies`);
-//     return hourlySales;
-//   },
-// }
-// 
-// 
-// const parisShop = {
-//   minHourlyPatrons: 20,
-//   maxHourlyPatrons: 38,
-//   cookiesPerPatron: 2.3,
-//   customersPerHour() {
-//     return Math.floor(Math.random() * (this.maxHourlyPatrons - this.minHourlyPatrons) + this.minHourlyPatrons);
-//   },
-//   cookiesPerHour() {
-//     return Math.floor(this.customersPerHour() * this.cookiesPerPatron);
-//   },
-//   cookiesPerDay() {
-//     let totalCookies = 0;
-//     const hourlySales = [];
-//     const openHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
-//     for (hr of openHours) {
-//       let randCookies = this.cookiesPerHour();
-//       hourlySales.push(`${hr}: ${randCookies} cookies`);
-//       totalCookies += randCookies;
-//     }
-//     hourlySales.push(`Total: ${totalCookies} cookies`);
-//     return hourlySales;
-//   },
-// }
-// 
-// 
-// const limaShop = {
-//   minHourlyPatrons: 2,
-//   maxHourlyPatrons: 16,
-//   cookiesPerPatron: 4.6,
-//   customersPerHour() {
-//     return Math.floor(Math.random() * (this.maxHourlyPatrons - this.minHourlyPatrons) + this.minHourlyPatrons);
-//   },
-//   cookiesPerHour() {
-//     return Math.floor(this.customersPerHour() * this.cookiesPerPatron);
-//   },
-//   cookiesPerDay() {
-//     let totalCookies = 0;
-//     const hourlySales = [];
-//     const openHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
-//     for (hr of openHours) {
-//       let randCookies = this.cookiesPerHour();
-//       hourlySales.push(`${hr}: ${randCookies} cookies`);
-//       totalCookies += randCookies;
-//     }
-//     hourlySales.push(`Total: ${totalCookies} cookies`);
-//     return hourlySales;
-//   },
-// }
-
-// const seattleList = document.querySelector('.seattle-sales');
-// const seattleDailySales = seattle.cookiesPerDay();
-// 
-// for (saleListing of seattleDailySales) {
-//   // create li element
-//   let listing = document.createElement('li');
-//   // set text content of listing to saleListing
-//   listing.textContent = saleListing;
-//   // append listing to seattleList
-//   seattleList.appendChild(listing);
-// }
