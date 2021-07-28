@@ -103,3 +103,7 @@ a {
   padding: 0 10px 4px 15px;
   cursor: pointer;
 }
+
+.capitalize {
+  text-transform: capitalize;
+}

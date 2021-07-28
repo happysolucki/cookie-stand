@@ -1,41 +1,45 @@
 const businessHours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
 
-function Shop(city, minHrPatrons, maxHrPatrons, cookiesPerPatron) {
-  this.city = city;
-  this.minHrPatrons = minHrPatrons;
-  this.maxHrPatrons = maxHrPatrons;
-  this.cookiesPerPatron = cookiesPerPatron;
-  this.cookieTotal = 0;
-  this.customersPerHour = function() {
+class Shop {
+  constructor( city, minHrPatrons, maxHrPatrons, cookiesPerPatron ) {
+    this.city = city;
+    this.minHrPatrons = minHrPatrons;
+    this.maxHrPatrons = maxHrPatrons;
+    this.cookiesPerPatron = cookiesPerPatron;
+    this.dailyCookieTotal = 0;
+  }
+
+  calcCustomersPerHour() {
     // round down a random number within the range of minHourlyPatrons and maxHourlyPatrons
     return Math.floor(Math.random() * (this.maxHrPatrons - this.minHrPatrons + 1) + this.minHrPatrons);
   }
-  this.cookiesPerHour = function() {
+  calcCookiesPerHour() {
     // take result of customersPerHour() and multiply it by average cookies per customer
-    return Math.floor(this.customersPerHour() * this.cookiesPerPatron);
+    return Math.floor(this.calcCustomersPerHour() * this.cookiesPerPatron);
   }
-  this.cookiesPerDay = function() {
+  calcCookiesPerDay() {
     let totalCookies = 0;
     const hourlySales = [];
-    for (hr of businessHours) {
+    // for ( const hr of businessHours ) {
+    for (let i = 0; i < businessHours.length; i++) {
       // save cookiesPerHour into variable
-      let randCookies = this.cookiesPerHour();
+      let randCookies = this.calcCookiesPerHour();
       // add value stored in randCookies to end of hourlySales array
       hourlySales.push(randCookies);
       // sum up all instances of randCookies into totalCookies
       totalCookies += randCookies;
     }
     // set ojbect's cookie total to totalCookies
-    this.cookieTotal = totalCookies;
+    this.dailyCookieTotal = totalCookies;
     return hourlySales;
-  },
-  this.renderList = function() {
+  }
+  renderList() {
     // store array that's returned from cookiesPerDay into sales
-    const sales = this.cookiesPerDay();
+    const sales = this.calcCookiesPerDay();
     // capture DOM element for heading that corresponds to this object's city property
     const cityHeading = document.querySelector(`.${this.city}-heading`);
     // set what'll display on the screen for cityHeading to capitalized city property
-    cityHeading.textContent = this.city[0].toUpperCase() + this.city.substring(1).toLowerCase();
+    cityHeading.textContent = this.city;
     // capture DOM element for list that corresponds to this object's city property
     const unorderedList = document.querySelector(`.${this.city}-sales`);
     for (let i = 0; i < businessHours.length; i++) {
@@ -48,25 +52,27 @@ function Shop(city, minHrPatrons, maxHrPatrons, cookiesPerPatron) {
     }
     // create element for total cookies sold in a day, set it's text content, then append to unorderedList
     const total = document.createElement('li');
-    total.textContent = `Total: ${this.cookieTotal} cookies`;
+    total.textContent = `Total: ${this.dailyCookieTotal} cookies`;
     unorderedList.appendChild(total);
-  },
-  this.renderTable = function() {
+  }
+  renderTable() {
     // store array that's returned from cookiesPerDay into sales
-    const sales = this.cookiesPerDay();
+    const sales = this.calcCookiesPerDay();
     // add this object's daily cookie total to end of sales array
-    sales.push(this.cookieTotal);
+    sales.push(this.dailyCookieTotal);
     console.log(sales);
     // capture DOM element for list that corresponds to this object's city property
     const cityRow = document.querySelector(`.${this.city}-row`);
     // create th element
     const rowHeader = document.createElement('th');
+    // add capitalize class to rowHeader
+    rowHeader.classList.add('capitalize');
     // ensure text content shows capitized city property
-    rowHeader.textContent = this.city[0].toUpperCase() + this.city.substring(1).toLowerCase();
+    rowHeader.textContent = this.city;
     // append rowHeader to end of cityRow
     cityRow.appendChild(rowHeader);
     // for length of sales
-    for (sale of sales) {
+    for ( const sale of sales ) {
       // creat td element
       const entry = document.createElement('td');
       // assign this entry's text content to current index in sales array
@@ -81,7 +87,7 @@ const tableRowHeader = (arr, selector) => {
   // capture DOM element that matches the selector parameter
   const tableHeader = document.querySelector(selector);
   // for item in parameter arr
-  for (item of arr) {
+  for (const item of arr) {
     // create td element
     const entry = document.createElement('td');
     // assign this entry's text content to current index in arr parameter
@@ -93,6 +99,22 @@ const tableRowHeader = (arr, selector) => {
   const entry = document.createElement('td');
   entry.textContent = 'Daily Total';
   tableHeader.appendChild(entry);
+}
+
+const tableRowFooter = (arr, arr2) => {
+  // sum each indice of multi-demensional array then add to array
+  const sums = arr[0].map((x, idx) => arr.reduce((sum, curr) => sum + curr[idx], 0));
+  // sum each value in arr2 then add value to end of sums array
+  sums.push(arr2.reduce((sum, curr) => sum + curr, 0));
+  const footerRow = document.querySelector('.footer-row');
+  for (const idx of sums) {
+    // create td element
+    const entry = document.createElement('td');
+    // assign this entry's text content to current index in arr parameter
+    entry.textContent = idx;
+    // append entry to footerRow
+    footerRow.appendChild(entry);
+  }
 }
 
 let seattle = new Shop('seattle', 23, 65, 6.3);
@@ -112,3 +134,8 @@ dubai.renderTable();
 paris.renderTable();
 lima.renderTable();
 
+const allCookieSales = [seattle.calcCookiesPerDay(), tokyo.calcCookiesPerDay(), dubai.calcCookiesPerDay(), paris.calcCookiesPerDay(), lima.calcCookiesPerDay()];
+
+const totalDaySales = [seattle.dailyCookieTotal, tokyo.dailyCookieTotal, dubai.dailyCookieTotal, paris.dailyCookieTotal, lima.dailyCookieTotal];
+
+tableRowFooter(allCookieSales, totalDaySales);
