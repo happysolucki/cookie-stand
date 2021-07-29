@@ -26,6 +26,7 @@ body {
 span {
   font-family: 'Poppins';
   color: #91785d;
+  cursor: pointer;
 }
 
 h3 {
@@ -62,7 +63,7 @@ a {
   color: #91785d;
 }
 
-.navLinks > a:hover {
+span:hover, .navLinks > a:hover {
   color: #453625;
 }
 
@@ -116,8 +117,21 @@ a {
   letter-spacing: 0.05em;
   padding: 0 10px 4px 15px;
   cursor: pointer;
+  font-size: 0.8rem;
+  white-space: break-spaces;
 }
 
 .capitalize {
   text-transform: capitalize;
+}
+
+table {
+  box-shadow: 6px 6px 0 0 #91785d;
+  border: 2px solid #91785d;
+  border-radius: 3px;
+  margin: 0 auto;
+}
+
+th, td {
+  padding: 12px 5px;
 }

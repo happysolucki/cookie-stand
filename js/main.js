@@ -38,7 +38,7 @@ class Shop {
     const sales = this.calcCookiesPerDay();
     // capture DOM element for heading that corresponds to this object's city property
     const cityHeading = document.querySelector(`.${this.city}-heading`);
-    // set what'll display on the screen for cityHeading to capitalized city property
+    // set what'll display on the screen for cityHeading to city property
     cityHeading.textContent = this.city;
     // capture DOM element for list that corresponds to this object's city property
     const unorderedList = document.querySelector(`.${this.city}-sales`);
@@ -123,9 +123,9 @@ let dubai = new Shop('dubai', 11, 38, 3.7);
 let paris = new Shop('paris', 20, 38, 2.3);
 let lima = new Shop('lima', 2, 16, 4.6);
 
-seattle.renderList();
-tokyo.renderList();
-dubai.renderList();
+// seattle.renderList();
+// tokyo.renderList();
+// dubai.renderList();
 
 tableRowHeader(businessHours, '.time-row');
 seattle.renderTable();
