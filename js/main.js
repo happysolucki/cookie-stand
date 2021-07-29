@@ -7,6 +7,7 @@ class Shop {
     this.maxHrPatrons = maxHrPatrons;
     this.cookiesPerPatron = cookiesPerPatron;
     this.dailyCookieTotal = 0;
+    this.dailyCookieCount = this.calcCookiesPerDay();
   }
 
   calcCustomersPerHour() {
@@ -31,11 +32,12 @@ class Shop {
     }
     // set ojbect's cookie total to totalCookies
     this.dailyCookieTotal = totalCookies;
+    // this.dailyCookieCount = hourlySales;
     return hourlySales;
   }
   renderList() {
-    // store array that's returned from cookiesPerDay into sales
-    const sales = this.calcCookiesPerDay();
+    // assign value of dailyCookieCount to sales
+    const sales = this.dailyCookieCount;
     // capture DOM element for heading that corresponds to this object's city property
     const cityHeading = document.querySelector(`.${this.city}-heading`);
     // set what'll display on the screen for cityHeading to city property
@@ -56,11 +58,10 @@ class Shop {
     unorderedList.appendChild(total);
   }
   renderTable() {
-    // store array that's returned from cookiesPerDay into sales
-    const sales = this.calcCookiesPerDay();
+    // assign value of dailyCookieCount to sales
+    const sales = this.dailyCookieCount;
     // add this object's daily cookie total to end of sales array
     sales.push(this.dailyCookieTotal);
-    console.log(sales);
     // capture DOM element for list that corresponds to this object's city property
     const cityRow = document.querySelector(`.${this.city}-row`);
     // create th element
@@ -101,11 +102,9 @@ const tableRowHeader = (arr, selector) => {
   tableHeader.appendChild(entry);
 }
 
-const tableRowFooter = (arr, arr2) => {
+const tableRowFooter = (arr) => {
   // sum each indice of multi-demensional array then add to array
   const sums = arr[0].map((x, idx) => arr.reduce((sum, curr) => sum + curr[idx], 0));
-  // sum each value in arr2 then add value to end of sums array
-  sums.push(arr2.reduce((sum, curr) => sum + curr, 0));
   const footerRow = document.querySelector('.footer-row');
   for (const idx of sums) {
     // create td element
@@ -123,10 +122,6 @@ let dubai = new Shop('dubai', 11, 38, 3.7);
 let paris = new Shop('paris', 20, 38, 2.3);
 let lima = new Shop('lima', 2, 16, 4.6);
 
-// seattle.renderList();
-// tokyo.renderList();
-// dubai.renderList();
-
 tableRowHeader(businessHours, '.time-row');
 seattle.renderTable();
 tokyo.renderTable();
@@ -134,8 +129,6 @@ dubai.renderTable();
 paris.renderTable();
 lima.renderTable();
 
-const allCookieSales = [seattle.calcCookiesPerDay(), tokyo.calcCookiesPerDay(), dubai.calcCookiesPerDay(), paris.calcCookiesPerDay(), lima.calcCookiesPerDay()];
+const allCookieSales = [seattle.dailyCookieCount, tokyo.dailyCookieCount, dubai.dailyCookieCount, paris.dailyCookieCount, lima.dailyCookieCount];
 
-const totalDaySales = [seattle.dailyCookieTotal, tokyo.dailyCookieTotal, dubai.dailyCookieTotal, paris.dailyCookieTotal, lima.dailyCookieTotal];
-
-tableRowFooter(allCookieSales, totalDaySales);
+tableRowFooter(allCookieSales);
