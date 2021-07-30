@@ -32,6 +32,7 @@ class Shop {
     }
     // set ojbect's cookie total to totalCookies
     this.dailyCookieTotal = totalCookies;
+    // add dailyCookieTotal to end of hourlySales array
     hourlySales.push(this.dailyCookieTotal);
     // this.dailyCookieCount = hourlySales;
     return hourlySales;
@@ -61,8 +62,7 @@ class Shop {
   renderTable() {
     // assign value of dailyCookieCount to sales
     const sales = this.dailyCookieCount;
-    // add this object's daily cookie total to end of sales array
-    // sales.push(this.dailyCookieTotal);
+    // capture table in DOM
     const salesTable = document.querySelector('#sales-table');
     // capture DOM element for list that corresponds to this object's city property
     const cityRow = document.createElement('tr');
@@ -83,16 +83,18 @@ class Shop {
       // append entry to cityRow
       cityRow.appendChild(entry);
     }
+    // append cityRow to table in DOM
     salesTable.appendChild(cityRow);
   }
 }
 
 const tableRowHeader = (arr) => {
-  // capture DOM element that matches the selector parameter
-  // const tableHeader = document.querySelector(selector);
+  // capture table in DOM
   const salesTable = document.querySelector('#sales-table');
+  // create tr and th elements
   const headerRow = document.createElement('tr');
   const rowHeader = document.createElement('th');
+  // append rowHeader to headerRow
   headerRow.appendChild(rowHeader);
   // for item in parameter arr
   for (const item of arr) {
@@ -100,25 +102,28 @@ const tableRowHeader = (arr) => {
     const entry = document.createElement('td');
     // assign this entry's text content to current index in arr parameter
     entry.textContent = item;
-    // append entry to timeRow
-    // tableHeader.appendChild(entry);
+    // append entry to headerRow
     headerRow.appendChild(entry);
   }
-  // create element that serves as title for daily cookies sold. append to tableHeader
+  // create element that serves as title for daily cookies sold. append to headerRow
   const entry = document.createElement('td');
   entry.textContent = 'Daily Total';
-  // tableHeader.appendChild(entry);
+  // append entry to headerRow
   headerRow.appendChild(entry);
+  // append header row to table in DOM
   salesTable.appendChild(headerRow);
 }
 
 const tableRowFooter = (arr) => {
   // sum each indice of multi-demensional array then add to array
   const sums = arr[0].map((x, idx) => arr.reduce((sum, curr) => sum + curr[idx], 0));
+  // capture table in DOM
   const salesTable = document.querySelector('#sales-table');
+  // creat tr and th elements
   const footerRow = document.createElement('tr');
   const footerHeader = document.createElement('th');
   footerHeader.textContent = 'Totals';
+  // append footerHeader to footerRow
   footerRow.appendChild(footerHeader);
   for (const idx of sums) {
     // create td element
@@ -128,6 +133,7 @@ const tableRowFooter = (arr) => {
     // append entry to footerRow
     footerRow.appendChild(entry);
   }
+  // append footerRow to table in DOM
   salesTable.appendChild(footerRow);
 }
 
@@ -143,101 +149,49 @@ const allCookieSales = [seattle.dailyCookieCount, tokyo.dailyCookieCount, dubai.
 
 const generateTable = () => {
   tableRowHeader(businessHours);
+  // for every shop in allShops array
   for (shop of allShops) {
     shop.renderTable();
   }
   tableRowFooter(allCookieSales);
 }
 
+generateTable();
+
 const appendUserShop = (event) => {
+  // prevent form submit from refreshing page
   event.preventDefault();
+  // capture DOM elements that correspond to inputs in form
   const city = document.querySelector('#city');
   const minCph = document.querySelector('#minCph');
   const maxCph = document.querySelector('#maxCph');
   const avgCookie = document.querySelector('#avgCookie');
-
+  
   let messages = [];
-
+  // if minCph is greater that maxCph, add error message to messages array
   if (parseInt(minCph.value) > parseInt(maxCph.value)) {
     messages.push('Minumum customers per hour cannot be greater than maximum customers per hour')
   }
-
-  console.log(messages);
-
+  // if there's an error I checked for
   if (messages.length > 0) {
     console.log(messages);
-    // e.preventDefault();
-    // e.stopPropagation();
   } else {
+    // create new shop using data from form
     let userShop = new Shop(city.value, parseInt(minCph.value), parseInt(maxCph.value), parseFloat(avgCookie.value));
-    console.log(userShop);
+    // add new shop to allShops array
     allShops.push(userShop);
+    // add dailyCookieCount of new shop to allCookieSales
     allCookieSales.push(userShop.dailyCookieCount);
-    console.log(allShops);
-    console.log(allCookieSales);
-    // userShop.renderTable();
+    // capture table in DOM
     const salesTable = document.querySelector('#sales-table');
+    // Clear elements inside of table
     salesTable.innerHTML = '';
-    // tableRowHeader(businessHours);
+    // generate table using updated data
     generateTable();
-    // tableRowFooter(allCookieSales);
   }
 }
-// const city = document.querySelector('#city');
-// const minCph = document.querySelector('#minCph');
-// const maxCph = document.querySelector('#maxCph');
-// const avgCookie = document.querySelector('#avgCookie');
-// const form = document.querySelector('#form');
 
+// capture form from DOM
 const form = document.querySelector('#form');
-
+// when form is submitted, call appendUserShop function
 form.addEventListener('submit', appendUserShop);
-
-// form.addEventListener('submit', (e) => {
-//   e.preventDefault();
-//   let messages = [];
-// 
-//   if (parseInt(minCph.value) > parseInt(maxCph.value)) {
-//     messages.push('Minumum customers per hour cannot be greater than maximum customers per hour')
-//   }
-// 
-//   console.log(messages);
-// 
-//   if (messages.length > 0) {
-//     // e.preventDefault();
-//     // e.stopPropagation();
-//   } else {
-//     let userShop = new Shop(city.value, parseInt(minCph.value), parseInt(maxCph.value), parseFloat(avgCookie.value));
-//     console.log(userShop);
-//     allShops.push(userShop);
-//     allCookieSales.push(userShop.dailyCookieCount);
-//     console.log(allShops);
-//     console.log(allCookieSales);
-//     // userShop.renderTable();
-//     const salesTable = document.querySelector('#sales-table');
-//     salesTable.innerHTML = '';
-//     // tableRowHeader(businessHours);
-//     generateTable();
-//     // tableRowFooter(allCookieSales);
-//   }
-// });
-
-generateTable();
-// tableRowFooter(allCookieSales);
-// const generateTable = () => {
-//   tableRowHeader(businessHours, '.time-row');
-//   for (shop of allShops) {
-//     shop.renderTable();
-//   }
-//   tableRowFooter(allCookieSales);
-// }
-// tableRowHeader(businessHours, '.time-row');
-// for (shop of allShops) {
-//   shop.renderTable();
-// }
-// // seattle.renderTable();
-// // tokyo.renderTable();
-// // dubai.renderTable();
-// // paris.renderTable();
-// // lima.renderTable();
-// tableRowFooter(allCookieSales);
