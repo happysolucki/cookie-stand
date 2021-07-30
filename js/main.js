@@ -32,6 +32,7 @@ class Shop {
     }
     // set ojbect's cookie total to totalCookies
     this.dailyCookieTotal = totalCookies;
+    hourlySales.push(this.dailyCookieTotal);
     // this.dailyCookieCount = hourlySales;
     return hourlySales;
   }
@@ -61,7 +62,7 @@ class Shop {
     // assign value of dailyCookieCount to sales
     const sales = this.dailyCookieCount;
     // add this object's daily cookie total to end of sales array
-    sales.push(this.dailyCookieTotal);
+    // sales.push(this.dailyCookieTotal);
     const salesTable = document.querySelector('#sales-table');
     // capture DOM element for list that corresponds to this object's city property
     const cityRow = document.createElement('tr');
@@ -86,9 +87,13 @@ class Shop {
   }
 }
 
-const tableRowHeader = (arr, selector) => {
+const tableRowHeader = (arr) => {
   // capture DOM element that matches the selector parameter
-  const tableHeader = document.querySelector(selector);
+  // const tableHeader = document.querySelector(selector);
+  const salesTable = document.querySelector('#sales-table');
+  const headerRow = document.createElement('tr');
+  const rowHeader = document.createElement('th');
+  headerRow.appendChild(rowHeader);
   // for item in parameter arr
   for (const item of arr) {
     // create td element
@@ -96,12 +101,15 @@ const tableRowHeader = (arr, selector) => {
     // assign this entry's text content to current index in arr parameter
     entry.textContent = item;
     // append entry to timeRow
-    tableHeader.appendChild(entry);
+    // tableHeader.appendChild(entry);
+    headerRow.appendChild(entry);
   }
   // create element that serves as title for daily cookies sold. append to tableHeader
   const entry = document.createElement('td');
   entry.textContent = 'Daily Total';
-  tableHeader.appendChild(entry);
+  // tableHeader.appendChild(entry);
+  headerRow.appendChild(entry);
+  salesTable.appendChild(headerRow);
 }
 
 const tableRowFooter = (arr) => {
@@ -134,22 +142,20 @@ const allShops = [seattle, tokyo, dubai, paris, lima];
 const allCookieSales = [seattle.dailyCookieCount, tokyo.dailyCookieCount, dubai.dailyCookieCount, paris.dailyCookieCount, lima.dailyCookieCount];
 
 const generateTable = () => {
-  tableRowHeader(businessHours, '.time-row');
+  tableRowHeader(businessHours);
   for (shop of allShops) {
     shop.renderTable();
   }
   tableRowFooter(allCookieSales);
 }
 
-const city = document.querySelector('#city');
-const minCph = document.querySelector('#minCph');
-const maxCph = document.querySelector('#maxCph');
-const avgCookie = document.querySelector('#avgCookie');
-const form = document.querySelector('#form');
+const appendUserShop = (event) => {
+  event.preventDefault();
+  const city = document.querySelector('#city');
+  const minCph = document.querySelector('#minCph');
+  const maxCph = document.querySelector('#maxCph');
+  const avgCookie = document.querySelector('#avgCookie');
 
-generateTable();
-
-form.addEventListener('submit', (e) => {
   let messages = [];
 
   if (parseInt(minCph.value) > parseInt(maxCph.value)) {
@@ -159,7 +165,9 @@ form.addEventListener('submit', (e) => {
   console.log(messages);
 
   if (messages.length > 0) {
-    e.preventDefault();
+    console.log(messages);
+    // e.preventDefault();
+    // e.stopPropagation();
   } else {
     let userShop = new Shop(city.value, parseInt(minCph.value), parseInt(maxCph.value), parseFloat(avgCookie.value));
     console.log(userShop);
@@ -167,11 +175,55 @@ form.addEventListener('submit', (e) => {
     allCookieSales.push(userShop.dailyCookieCount);
     console.log(allShops);
     console.log(allCookieSales);
+    // userShop.renderTable();
+    const salesTable = document.querySelector('#sales-table');
+    salesTable.innerHTML = '';
+    // tableRowHeader(businessHours);
     generateTable();
+    // tableRowFooter(allCookieSales);
   }
-});
+}
+// const city = document.querySelector('#city');
+// const minCph = document.querySelector('#minCph');
+// const maxCph = document.querySelector('#maxCph');
+// const avgCookie = document.querySelector('#avgCookie');
+// const form = document.querySelector('#form');
 
+const form = document.querySelector('#form');
 
+form.addEventListener('submit', appendUserShop);
+
+// form.addEventListener('submit', (e) => {
+//   e.preventDefault();
+//   let messages = [];
+// 
+//   if (parseInt(minCph.value) > parseInt(maxCph.value)) {
+//     messages.push('Minumum customers per hour cannot be greater than maximum customers per hour')
+//   }
+// 
+//   console.log(messages);
+// 
+//   if (messages.length > 0) {
+//     // e.preventDefault();
+//     // e.stopPropagation();
+//   } else {
+//     let userShop = new Shop(city.value, parseInt(minCph.value), parseInt(maxCph.value), parseFloat(avgCookie.value));
+//     console.log(userShop);
+//     allShops.push(userShop);
+//     allCookieSales.push(userShop.dailyCookieCount);
+//     console.log(allShops);
+//     console.log(allCookieSales);
+//     // userShop.renderTable();
+//     const salesTable = document.querySelector('#sales-table');
+//     salesTable.innerHTML = '';
+//     // tableRowHeader(businessHours);
+//     generateTable();
+//     // tableRowFooter(allCookieSales);
+//   }
+// });
+
+generateTable();
+// tableRowFooter(allCookieSales);
 // const generateTable = () => {
 //   tableRowHeader(businessHours, '.time-row');
 //   for (shop of allShops) {
