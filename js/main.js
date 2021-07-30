@@ -94,6 +94,8 @@ const tableRowHeader = (arr) => {
   // create tr and th elements
   const headerRow = document.createElement('tr');
   const rowHeader = document.createElement('th');
+  // add class to headerRow for styling
+  headerRow.classList.add('work-hours');
   // append rowHeader to headerRow
   headerRow.appendChild(rowHeader);
   // for item in parameter arr
@@ -161,15 +163,15 @@ generateTable();
 const appendUserShop = (event) => {
   // prevent form submit from refreshing page
   event.preventDefault();
-  // capture DOM elements that correspond to inputs in form
-  const city = document.querySelector('#city');
-  const minCph = document.querySelector('#minCph');
-  const maxCph = document.querySelector('#maxCph');
-  const avgCookie = document.querySelector('#avgCookie');
+  // store values from form inputs to corresponding variables
+  const city = event.target.city.value;
+  const minCph = event.target.minCph.value;
+  const maxCph = event.target.maxCph.value;
+  const avgCookie = event.target.avgCookie.value;
   
   let messages = [];
   // if minCph is greater that maxCph, add error message to messages array
-  if (parseInt(minCph.value) > parseInt(maxCph.value)) {
+  if (parseInt(minCph) > parseInt(maxCph)) {
     messages.push('Minumum customers per hour cannot be greater than maximum customers per hour')
   }
   // if there's an error I checked for
@@ -177,7 +179,7 @@ const appendUserShop = (event) => {
     console.log(messages);
   } else {
     // create new shop using data from form
-    let userShop = new Shop(city.value, parseInt(minCph.value), parseInt(maxCph.value), parseFloat(avgCookie.value));
+    let userShop = new Shop(city, parseInt(minCph), parseInt(maxCph), parseFloat(avgCookie));
     // add new shop to allShops array
     allShops.push(userShop);
     // add dailyCookieCount of new shop to allCookieSales

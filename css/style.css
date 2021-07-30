@@ -6,6 +6,20 @@
 }
 
 @font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 500;
+  src: url(../assets/fonts/baloo-2-v2-latin-500.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 600;
+  src: url(../assets/fonts/baloo-2-v2-latin-600.woff2) format('woff2');
+}
+
+@font-face {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
@@ -124,6 +138,11 @@ span:hover, .navLinks > a:hover {
   margin: 12px 15px;
 }
 
+.dropDownHours {
+  color: #91785d;
+  font-weight: 500;
+}
+
 .dropDownOption {
   display: block;
   text-align: left;
@@ -146,6 +165,34 @@ table {
   margin: 0 auto 25px 0;
 }
 
+input {
+  border: 2px solid #91785d;
+  /* background-color: #453625; */
+  margin-left: 10px;
+  border-radius: 2px;
+}
+
+th, .work-hours {
+  color: #91785d;
+  font-weight: 600;
+}
+
 th, td {
   padding: 12px 5px;
+}
+
+#submit {
+  border: none;
+  padding: 0.25rem .5rem;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #453625;
+  color: #fff;
+  transition: 0.25s background-color ease;
+  margin-left: 0;
+}
+
+#submit:hover {
+  background-color: #91785d;
 }
