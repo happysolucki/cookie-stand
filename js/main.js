@@ -62,8 +62,9 @@ class Shop {
     const sales = this.dailyCookieCount;
     // add this object's daily cookie total to end of sales array
     sales.push(this.dailyCookieTotal);
+    const salesTable = document.querySelector('#sales-table');
     // capture DOM element for list that corresponds to this object's city property
-    const cityRow = document.querySelector(`.${this.city}-row`);
+    const cityRow = document.createElement('tr');
     // create th element
     const rowHeader = document.createElement('th');
     // add capitalize class to rowHeader
@@ -81,6 +82,7 @@ class Shop {
       // append entry to cityRow
       cityRow.appendChild(entry);
     }
+    salesTable.appendChild(cityRow);
   }
 }
 
@@ -105,7 +107,11 @@ const tableRowHeader = (arr, selector) => {
 const tableRowFooter = (arr) => {
   // sum each indice of multi-demensional array then add to array
   const sums = arr[0].map((x, idx) => arr.reduce((sum, curr) => sum + curr[idx], 0));
-  const footerRow = document.querySelector('.footer-row');
+  const salesTable = document.querySelector('#sales-table');
+  const footerRow = document.createElement('tr');
+  const footerHeader = document.createElement('th');
+  footerHeader.textContent = 'Totals';
+  footerRow.appendChild(footerHeader);
   for (const idx of sums) {
     // create td element
     const entry = document.createElement('td');
@@ -114,6 +120,7 @@ const tableRowFooter = (arr) => {
     // append entry to footerRow
     footerRow.appendChild(entry);
   }
+  salesTable.appendChild(footerRow);
 }
 
 let seattle = new Shop('seattle', 23, 65, 6.3);
@@ -122,13 +129,63 @@ let dubai = new Shop('dubai', 11, 38, 3.7);
 let paris = new Shop('paris', 20, 38, 2.3);
 let lima = new Shop('lima', 2, 16, 4.6);
 
-tableRowHeader(businessHours, '.time-row');
-seattle.renderTable();
-tokyo.renderTable();
-dubai.renderTable();
-paris.renderTable();
-lima.renderTable();
+const allShops = [seattle, tokyo, dubai, paris, lima];
 
 const allCookieSales = [seattle.dailyCookieCount, tokyo.dailyCookieCount, dubai.dailyCookieCount, paris.dailyCookieCount, lima.dailyCookieCount];
 
-tableRowFooter(allCookieSales);
+const generateTable = () => {
+  tableRowHeader(businessHours, '.time-row');
+  for (shop of allShops) {
+    shop.renderTable();
+  }
+  tableRowFooter(allCookieSales);
+}
+
+const city = document.querySelector('#city');
+const minCph = document.querySelector('#minCph');
+const maxCph = document.querySelector('#maxCph');
+const avgCookie = document.querySelector('#avgCookie');
+const form = document.querySelector('#form');
+
+generateTable();
+
+form.addEventListener('submit', (e) => {
+  let messages = [];
+
+  if (parseInt(minCph.value) > parseInt(maxCph.value)) {
+    messages.push('Minumum customers per hour cannot be greater than maximum customers per hour')
+  }
+
+  console.log(messages);
+
+  if (messages.length > 0) {
+    e.preventDefault();
+  } else {
+    let userShop = new Shop(city.value, parseInt(minCph.value), parseInt(maxCph.value), parseFloat(avgCookie.value));
+    console.log(userShop);
+    allShops.push(userShop);
+    allCookieSales.push(userShop.dailyCookieCount);
+    console.log(allShops);
+    console.log(allCookieSales);
+    generateTable();
+  }
+});
+
+
+// const generateTable = () => {
+//   tableRowHeader(businessHours, '.time-row');
+//   for (shop of allShops) {
+//     shop.renderTable();
+//   }
+//   tableRowFooter(allCookieSales);
+// }
+// tableRowHeader(businessHours, '.time-row');
+// for (shop of allShops) {
+//   shop.renderTable();
+// }
+// // seattle.renderTable();
+// // tokyo.renderTable();
+// // dubai.renderTable();
+// // paris.renderTable();
+// // lima.renderTable();
+// tableRowFooter(allCookieSales);

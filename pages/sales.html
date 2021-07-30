@@ -15,37 +15,43 @@
           <a href="contact.html">Contact</a>
         </div>
       </div>
-    <table>
+    <table id="sales-table">
       <tr class="time-row">
         <th></th>
       </tr>
-      <tr class="seattle-row"></tr>
-      <tr class="tokyo-row"></tr>
-      <tr class="dubai-row"></tr>
-      <tr class="paris-row"></tr>
-      <tr class="lima-row"></tr>
-      <tr class="footer-row">
-        <th>Totals</th>
-      </tr>
+      <!-- <tr class="seattle-row"></tr> -->
+      <!-- <tr class="tokyo-row"></tr> -->
+      <!-- <tr class="dubai-row"></tr> -->
+      <!-- <tr class="paris-row"></tr> -->
+      <!-- <tr class="lima-row"></tr> -->
+      <!-- <tr class="footer-row"> -->
+      <!--   <th>Totals</th> -->
+      <!-- </tr> -->
     </table>
-    <form>
+    <form id="form" action='sales.html' method="GET">
       <div>
         <label for="city">Enter city: </label> 
-        <input type="text" name="city">
+        <input type="text" name="city" id="city" required>
       </div>
       <div>
         <label for="minCph">Enter minimum customers per hour: </label> 
-        <input type="number" name="minCph">
+        <input type="number" name="minCph" id="minCph" min="1" required>
       </div>
       <div>
         <label for="maxCph">Enter maximum customers per hour: </label> 
-        <input type="number" name="maxCph">
+        <input type="number" name="maxCph" id="maxCph" min="1" required>
       </div>
       <div>
         <label for="avgCookie">Enter average cookies per customer: </label> 
-        <input type="number" name="avgCookie">
+        <input type="number" name="avgCookie" id="avgCookie" min="1" step="any" required>
+      </div>
+      <div>
+        <input id="submit" type="submit" value="Submit">
       </div>
     </form>
+    <div id="test">
+      
+    </div>
     </section>
     <script src="../js/main.js"></script>
   </body>
